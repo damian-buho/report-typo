@@ -1,6 +1,6 @@
 {
   "name": "@damian-buho/report-typo",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "description": "Ctrl+Enter typo reporting for any website",
   "main": "dist/index.js",
@@ -61,8 +61,8 @@
     "access": "public"
   },
   "repository": {
-    "url": "git@github.com:damian-buho/report-typo.git",
-    "type": "git"
+    "type": "git",
+    "url": "git@github.com:damian-buho/report-typo.git"
   },
   "bugs": {
     "url": "https://github.com/damian-buho/report-typo/issues"
@@ -113,8 +113,8 @@
   ],
   "maintainers": [
     {
-      "name": "Damián Búho",
       "email": "damian.buho@proton.me",
+      "name": "Damián Búho",
       "url": "https://dbuho.me"
     }
   ]
