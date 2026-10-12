@@ -1,0 +1,121 @@
+{
+  "name": "@damian-buho/report-typo",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Ctrl+Enter typo reporting for any website",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./en": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/en.js"
+    },
+    "./es": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/es.js"
+    },
+    "./uk": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/uk.js"
+    }
+  },
+  "files": [
+    "dist/"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsup && tsc --project tsconfig.build.json",
+    "build:test": "TEST_BUILD=1 tsup",
+    "pretest": "npm run build:test",
+    "test": "node --test 'dist/test/*.test.js'",
+    "posttest": "npm run build && size-limit",
+    "typecheck": "tsc --noEmit",
+    "check-size": "size-limit",
+    "prepublishOnly": "npm run build",
+    "lint": "eslint ./",
+    "format": "prettier --write 'src/**/*.ts' 'tests/**/*.ts'",
+    "format:check": "prettier --check 'src/**/*.ts' 'tests/**/*.ts'"
+  },
+  "keywords": [
+    "typo",
+    "orphus",
+    "proofreading",
+    "reporting-api",
+    "browser"
+  ],
+  "author": {
+    "email": "damian.buho@proton.me",
+    "name": "Damián Búho",
+    "url": "https://dbuho.me"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "url": "git@github.com:damian-buho/report-typo.git",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/damian-buho/report-typo/issues"
+  },
+  "homepage": "https://github.com/damian-buho/report-typo#readme",
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@size-limit/preset-small-lib": "14.2.0",
+    "@types/eslint": "9.6.1",
+    "@types/node": "26.6.5",
+    "esbuild": "0.28.2",
+    "eslint": "10.12.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-import-x": "4.17.1",
+    "eslint-plugin-n": "18.4.1",
+    "eslint-plugin-promise": "7.3.0",
+    "eslint-plugin-tsdoc": "0.5.4",
+    "eslint-plugin-unicorn": "76.0.0",
+    "globals": "17.13.0",
+    "prettier": "3.9.9",
+    "size-limit": "14.2.0",
+    "tsup": "8.5.1",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.1",
+    "yaml": "2.9.1"
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "bracketSpacing": true,
+    "printWidth": 100,
+    "quoteProps": "as-needed",
+    "semi": false,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "none",
+    "useTabs": false
+  },
+  "overrides": {
+    "esbuild": "0.28.2",
+    "globals": "$globals"
+  },
+  "size-limit": [
+    {
+      "path": "./dist/index.js",
+      "limit": "3 kB",
+      "gzip": true
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "Damián Búho",
+      "email": "damian.buho@proton.me",
+      "url": "https://dbuho.me"
+    }
+  ]
+}

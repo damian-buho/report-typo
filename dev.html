@@ -1,0 +1,19 @@
+<!doctype html>
+<!--
+SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+
+SPDX-License-Identifier: MIT
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>report-typo dev page</title>
+  </head>
+  <body>
+    <p>Select a word in this sentense and press Ctrl+Enter (Cmd+Enter on macOS).</p>
+    <script type="module">
+      import { reportTypo } from './dist/index.js'
+      reportTypo({ endpoint: 'http://localhost:8080/', cooldownMs: 0 })
+    </script>
+  </body>
+</html>
