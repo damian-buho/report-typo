@@ -20,6 +20,7 @@ identity:
   released: "2026-10-12"
 includes:
   - .makefile/core/ci.yaml
+  - .makefile/core/traits/release.yaml
   - .makefile/library/languages/node.yaml
   - .makefile/library/traits/node-publish.yaml
   - https://kiota.ch/damian-buho/metadata/raw/branch/main/forge/codeberg.yaml
