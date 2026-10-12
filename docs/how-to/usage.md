@@ -40,6 +40,39 @@ Content-Security-Policy: connect-src 'self' https://relay.example.com
 | `locale`       | page lang | Dialog language                                                       |
 | `maxSelection` | `256`     | Longest selection sent, in characters                                 |
 | `cooldownMs`   | `10000`   | Pause after a report before the next one, kept in memory only         |
+| `comment`      | `false`   | Adds an optional comment field to the built-in dialog                 |
+| `ui`           | —         | Your own dialog, see below; replaces the built-in one                 |
+
+## Match the dialog to your site
+
+The built-in dialog reads these custom properties, set on `report-typo` or any ancestor:
+
+```css
+report-typo {
+  --report-typo-font: 1rem/1.5 Georgia, serif;
+  --report-typo-color: #222;
+  --report-typo-background: #fffdf5;
+  --report-typo-border: 2px solid #222;
+  --report-typo-radius: 0;
+  --report-typo-highlight: #ffe08a;
+}
+```
+
+## Use your own dialog
+
+`ui` receives the draft (`selection`, `prefix`, `suffix`) and resolves `{ comment }` to send, or `null` to cancel. The built-in dialog is the default implementation of the same function.
+
+```js
+reportTypo({
+  endpoint: 'https://relay.example.com/',
+  ui: async ({ selection }) => {
+    const comment = window.prompt(`Report “${selection}”? Add a note if you like:`)
+    return comment === null ? null : { comment }
+  }
+})
+```
+
+A comment is trimmed and cut to 1024 bytes, the most report-relay keeps.
 
 ## Send to report-relay
 
