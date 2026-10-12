@@ -1,5 +1,5 @@
 {
-  "name": "@damian-buho/report-typo",
+  "name": "report-typo",
   "version": "0.1.0",
   "type": "module",
   "description": "Ctrl+Enter typo reporting for any website",

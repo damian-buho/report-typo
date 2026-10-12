@@ -10,7 +10,7 @@ A reader selects a typo, presses Ctrl+Enter (Cmd+Enter on macOS), checks the tex
 ## Start it
 
 ```js
-import { reportTypo } from '@damian-buho/report-typo'
+import { reportTypo } from 'report-typo'
 
 const stop = reportTypo({ endpoint: 'https://relay.example.com/' })
 ```
@@ -18,7 +18,7 @@ const stop = reportTypo({ endpoint: 'https://relay.example.com/' })
 `reportTypo` returns a function that stops listening. The dialog language follows the `locale` option, then the page’s `lang` attribute, then the browser language; English, Spanish and Ukrainian ship today. A page in one language can load a smaller bundle with only that locale:
 
 ```js
-import { reportTypo } from '@damian-buho/report-typo/uk'
+import { reportTypo } from 'report-typo/uk'
 ```
 
 ## Allow it in your Content Security Policy

@@ -90,12 +90,12 @@ links:
       es: Paquete en npm
       uk: Пакунок на npm
     type: package-registry
-    url: https://www.npmjs.com/package/@damian-buho/report-typo
+    url: https://www.npmjs.com/package/report-typo
 org:
   projectfile:
     artifacts:
       npm-package:
-        name: "@damian-buho/report-typo"
+        name: "report-typo"
         browser: true
     build:
       args:

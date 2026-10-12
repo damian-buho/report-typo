@@ -16,7 +16,7 @@ Una biblioteca de navegador que permite a los lectores avisar de una errata sele
 
 ![Project status](https://badges.kiota.ch/static/v1?label=status&message=experimental&color=1d63ed&style=flat-square) [![Last commit on kiota.ch](https://badges.kiota.ch/gitea/last-commit/damian-buho/report-typo?gitea_url=https://kiota.ch&label=last%20commit%20on%20kiota.ch&style=flat-square)](https://kiota.ch/damian-buho/report-typo) [![Last commit on Codeberg](https://badges.kiota.ch/gitea/last-commit/damian-buho/report-typo?gitea_url=https://codeberg.org&label=last%20commit%20on%20Codeberg&style=flat-square)](https://codeberg.org/damian-buho/report-typo) [![Last commit on GitHub](https://badges.kiota.ch/github/last-commit/damian-buho/report-typo?label=last%20commit%20on%20GitHub&style=flat-square)](https://github.com/damian-buho/report-typo)
 
-[![npm version](https://badges.kiota.ch/npm/v/@damian-buho/report-typo?style=flat-square)](https://www.npmjs.com/package/@damian-buho/report-typo) [![npm downloads per month](https://badges.kiota.ch/npm/dm/@damian-buho/report-typo?style=flat-square)](https://www.npmjs.com/package/@damian-buho/report-typo) [![Minified and gzipped bundle size](https://badges.kiota.ch/bundlephobia/minzip/@damian-buho/report-typo?style=flat-square)](https://bundlephobia.com/package/@damian-buho/report-typo) [![Dependency freshness](https://badges.kiota.ch/librariesio/release/npm/@damian-buho/report-typo?style=flat-square)](https://libraries.io/npm/@damian-buho/report-typo)
+[![npm version](https://badges.kiota.ch/npm/v/report-typo?style=flat-square)](https://www.npmjs.com/package/report-typo) [![npm downloads per month](https://badges.kiota.ch/npm/dm/report-typo?style=flat-square)](https://www.npmjs.com/package/report-typo) [![Minified and gzipped bundle size](https://badges.kiota.ch/bundlephobia/minzip/report-typo?style=flat-square)](https://bundlephobia.com/package/report-typo) [![Dependency freshness](https://badges.kiota.ch/librariesio/release/npm/report-typo?style=flat-square)](https://libraries.io/npm/report-typo)
 
 [![Publish pipeline on GitHub](https://github.com/damian-buho/report-typo/actions/workflows/published.yaml/badge.svg?style=flat-square)](https://github.com/damian-buho/report-typo/actions) [![Vulnerability audit on GitHub](https://github.com/damian-buho/report-typo/actions/workflows/audited.yaml/badge.svg?style=flat-square)](https://github.com/damian-buho/report-typo/actions) [![Dependency freshness on GitHub](https://github.com/damian-buho/report-typo/actions/workflows/check-outdated.yaml/badge.svg?style=flat-square)](https://github.com/damian-buho/report-typo/actions) [![Analysis sweep on GitHub](https://github.com/damian-buho/report-typo/actions/workflows/analyzed.yaml/badge.svg?style=flat-square)](https://github.com/damian-buho/report-typo/actions)
 
@@ -24,14 +24,14 @@ Una biblioteca de navegador que permite a los lectores avisar de una errata sele
 
 ## Qué entrega este proyecto
 
-- **Paquete npm** `@damian-buho/report-typo`
+- **Paquete npm** `report-typo`
 
 ## Instalación
 
 Añade el paquete a tu proyecto:
 
 ```sh
-npm install @damian-buho/report-typo
+npm install report-typo
 ```
 
 ## Compilación
