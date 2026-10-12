@@ -21,7 +21,7 @@ export default tseslint.config(
   nPlugin.configs['flat/recommended-module'],
   flatConfigs.recommended,
   promisePlugin.configs['flat/recommended'],
-  unicornPlugin.configs['flat/recommended'],
+  unicornPlugin.configs.recommended,
   prettierConfig,
   {
     files: ['**/*.js', '**/*.ts'],
@@ -70,6 +70,12 @@ export default tseslint.config(
     files: ['tests/**/*.ts'],
     rules: {
       'n/no-missing-import': 'off'
+    }
+  },
+  {
+    files: ['*.config.{js,ts}'],
+    rules: {
+      'unicorn/no-top-level-side-effects': 'off'
     }
   }
 )
