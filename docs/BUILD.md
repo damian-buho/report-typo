@@ -14,6 +14,8 @@ Clone the repository with its submodules:
 git clone --recurse-submodules https://codeberg.org/damian-buho/report-typo report-typo && cd report-typo
 ```
 
+- [Makefile reference](how-to/MAKEFILE.md)
+
 Run `make` with no arguments for the default target; run `make help` to list every target.
 
 Pipeline entry points:

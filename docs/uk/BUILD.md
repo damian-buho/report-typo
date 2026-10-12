@@ -16,6 +16,8 @@ pf-cli-managed: yes
 git clone --recurse-submodules https://codeberg.org/damian-buho/report-typo report-typo && cd report-typo
 ```
 
+- [Довідник із Makefile](../how-to/MAKEFILE.md)
+
 Виконайте `make` без аргументів для типової цілі; виконайте `make help`, щоб переглянути всі цілі.
 
 Точки входу конвеєра:

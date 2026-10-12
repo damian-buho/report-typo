@@ -16,6 +16,8 @@ Clona el repositorio con sus submódulos:
 git clone --recurse-submodules https://codeberg.org/damian-buho/report-typo report-typo && cd report-typo
 ```
 
+- [Referencia del Makefile](../how-to/MAKEFILE.md)
+
 Ejecuta `make` sin argumentos para el destino predeterminado; ejecuta `make help` para listar todos los destinos.
 
 Puntos de entrada de la canalización:
