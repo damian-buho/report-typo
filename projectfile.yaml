@@ -94,6 +94,9 @@ org:
       npm-package:
         name: "@damian-buho/report-typo"
         browser: true
+    build:
+      args:
+        B19_NODE_SERIES: 26
     status: experimental
 repositories:
   - branch: main

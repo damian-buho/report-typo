@@ -15,7 +15,7 @@ name: published
     inputs:
       B19_NODE_SERIES:
         type: string
-        default: "24"
+        default: "26"
 permissions:
   contents: read
 concurrency:
@@ -60,7 +60,7 @@ jobs:
         uses: projectfile-org/actions/run-tool@ffe2de775b8b50b564f401adc488fce3df2fd607 # v1
         with:
           image: ${{ vars.NODE_TOOL_IMAGE || format('{0}/b19/node', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ vars.M6E_BASE_IMAGE_VARIANT_PREFIX }}n${{ vars.B19_NODE_SERIES || '24' }}
+          version: ${{ vars.M6E_BASE_IMAGE_VARIANT_PREFIX }}n${{ vars.B19_NODE_SERIES || '26' }}
           run: .makefile/library/scripts/npm-publish.sh
           env: |-
             ACTIONS_ID_TOKEN_REQUEST_TOKEN
@@ -291,7 +291,7 @@ jobs:
         uses: projectfile-org/actions/run-tool@ffe2de775b8b50b564f401adc488fce3df2fd607 # v1
         with:
           image: ${{ vars.NODE_TOOL_IMAGE || format('{0}/b19/node', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ vars.M6E_BASE_IMAGE_VARIANT_PREFIX }}n${{ vars.B19_NODE_SERIES || '24' }}
+          version: ${{ vars.M6E_BASE_IMAGE_VARIANT_PREFIX }}n${{ vars.B19_NODE_SERIES || '26' }}
           run: npm ci
           mounts: ${{ runner.temp }}/ci-cache/npm:/app/.cache/npm:rw
       - name: save npm
@@ -319,14 +319,14 @@ jobs:
         uses: projectfile-org/actions/run-tool@ffe2de775b8b50b564f401adc488fce3df2fd607 # v1
         with:
           image: ${{ vars.NODE_TOOL_IMAGE || format('{0}/b19/node', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ vars.M6E_BASE_IMAGE_VARIANT_PREFIX }}n${{ vars.B19_NODE_SERIES || '24' }}
+          version: ${{ vars.M6E_BASE_IMAGE_VARIANT_PREFIX }}n${{ vars.B19_NODE_SERIES || '26' }}
           run: npm test --if-present
       - name: npm-typecheck
         if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_NPM_TYPECHECK != 'true'
         uses: projectfile-org/actions/run-tool@ffe2de775b8b50b564f401adc488fce3df2fd607 # v1
         with:
           image: ${{ vars.NODE_TOOL_IMAGE || format('{0}/b19/node', vars.SOURCE_DOCKER_REGISTRY || 'ghcr.io/damian-buho') }}
-          version: ${{ vars.M6E_BASE_IMAGE_VARIANT_PREFIX }}n${{ vars.B19_NODE_SERIES || '24' }}
+          version: ${{ vars.M6E_BASE_IMAGE_VARIANT_PREFIX }}n${{ vars.B19_NODE_SERIES || '26' }}
           run: npm run typecheck --if-present
       - name: auto-jsonlint
         if: vars.CI_SKIP_SOURCE_PASSES_LINT != 'true' && vars.CI_SKIP_AUTO_JSONLINT != 'true'
