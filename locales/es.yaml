@@ -5,3 +5,5 @@ dir: ltr
 title: Avisar de una errata
 send: Enviar
 cancel: Cancelar
+comment: Comentario (opcional)
+commentPlaceholder: ¿Qué debería decir?

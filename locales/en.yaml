@@ -5,3 +5,5 @@ dir: ltr
 title: Report a typo
 send: Send
 cancel: Cancel
+comment: Comment (optional)
+commentPlaceholder: What should it say?

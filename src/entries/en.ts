@@ -6,7 +6,7 @@ import en from '../../locales/en.yaml'
 import { create } from '../core.js'
 
 export type { Options } from '../core.js'
-export type { Draft, Messages, Send, TypoBody, TypoReport } from '../types.js'
+export type { Confirmation, Draft, Messages, Send, TypoBody, TypoReport, Ui } from '../types.js'
 export { relay } from '../transport/relay.js'
 export { webhook, type Format } from '../transport/webhook.js'
 

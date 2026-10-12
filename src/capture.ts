@@ -22,6 +22,17 @@ export function isEditable(target: EventTarget | null): boolean {
   return Boolean(element?.closest?.(EDITABLE))
 }
 
+/** Bytes report-relay keeps of one free-text field. */
+export const MAX_TEXT_BYTES = 1024
+
+/** Cuts text to a UTF-8 byte budget on a code point boundary. */
+export function clipBytes(text: string, max = MAX_TEXT_BYTES): string {
+  const encoder = new TextEncoder()
+  let clipped = text
+  while (encoder.encode(clipped).length > max) clipped = [...clipped].slice(0, -1).join('')
+  return clipped
+}
+
 const squash = (text: string): string => text.replaceAll(/\s+/g, ' ')
 
 /** Builds a draft from the text before, inside and after a selection, cut to whole words. */

@@ -5,3 +5,5 @@ dir: ltr
 title: Повідомити про одруківку
 send: Надіслати
 cancel: Скасувати
+comment: Коментар (необов’язково)
+commentPlaceholder: Як має бути?

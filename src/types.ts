@@ -23,6 +23,14 @@ export interface TypoReport {
   body: TypoBody
 }
 
+/** What the reader confirmed. */
+export interface Confirmation {
+  comment?: string
+}
+
+/** Shows a draft to the reader; resolves null or undefined when they cancel. */
+export type Ui = (draft: Draft) => Promise<Confirmation | null | undefined>
+
 /** Delivers one report; rejects when it was not delivered. */
 export type Send = (report: TypoReport) => Promise<void>
 
@@ -32,4 +40,6 @@ export interface Messages {
   title: string
   send: string
   cancel: string
+  comment: string
+  commentPlaceholder: string
 }

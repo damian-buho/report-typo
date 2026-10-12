@@ -4,7 +4,14 @@
 
 import { describe, it } from 'node:test'
 import assert from 'node:assert/strict'
-import { CONTEXT_CHARS, isEditable, isTrigger, toDraft } from '../src/capture.js'
+import {
+  clipBytes,
+  CONTEXT_CHARS,
+  isEditable,
+  isTrigger,
+  MAX_TEXT_BYTES,
+  toDraft
+} from '../src/capture.js'
 
 describe('isTrigger', () => {
   it('fires on Ctrl+Enter and Cmd+Enter only', () => {
@@ -46,5 +53,18 @@ describe('toDraft', () => {
 
   it('caps the selection', () => {
     assert.equal(toDraft('', 'x'.repeat(300), '', 256).selection.length, 256)
+  })
+})
+
+describe('clipBytes', () => {
+  it('keeps text within the budget whole', () => {
+    assert.equal(clipBytes('tpyo', 8), 'tpyo')
+  })
+
+  it('cuts multi-byte text on a code point boundary', () => {
+    const clipped = clipBytes('я'.repeat(600))
+    assert.ok(new TextEncoder().encode(clipped).length <= MAX_TEXT_BYTES)
+    assert.equal(clipped, 'я'.repeat(512))
+    assert.equal(clipBytes('a😀', 3), 'a')
   })
 })

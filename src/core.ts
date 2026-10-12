@@ -2,11 +2,11 @@
 //
 // SPDX-License-Identifier: MIT
 
-import { capture, isEditable, isTrigger } from './capture.js'
+import { capture, clipBytes, isEditable, isTrigger } from './capture.js'
 import { confirm } from './dialog.js'
 import { relay } from './transport/relay.js'
 import { webhook, type Format } from './transport/webhook.js'
-import type { Messages, Send } from './types.js'
+import type { Messages, Send, Ui } from './types.js'
 
 /** Options of `reportTypo`; `endpoint` or `send` is required. */
 export interface Options {
@@ -17,6 +17,8 @@ export interface Options {
   locale?: string
   maxSelection?: number
   cooldownMs?: number
+  comment?: boolean
+  ui?: Ui
 }
 
 const debug = (message: string, data: unknown): void =>
@@ -40,13 +42,15 @@ export function create(catalog: Record<string, Messages>) {
       transport = 'relay',
       format,
       maxSelection = 256,
-      cooldownMs = 10_000
+      cooldownMs = 10_000,
+      comment = false
     } = options
     if (!endpoint && !options.send) throw new TypeError('report-typo: set `endpoint` or `send`')
     const send =
       options.send ?? (transport === 'webhook' ? webhook(endpoint!, format) : relay(endpoint!))
     const pageLang = document.documentElement.lang
     const [locale, messages] = pick(catalog, options.locale ?? (pageLang || navigator.language))
+    const ui = options.ui ?? (draft => confirm(draft, messages, locale, comment))
     let last = -Infinity
     let isOpen = false
     const onKey = async (event: KeyboardEvent): Promise<void> => {
@@ -61,12 +65,13 @@ export function create(catalog: Record<string, Messages>) {
       event.preventDefault()
       isOpen = true
       try {
-        const confirmation = await confirm(draft, messages, locale)
+        const confirmation = await ui(draft)
         if (!confirmation) return debug('cancelled', { selection: draft.selection })
         last = Date.now()
-        const body = { ...draft, ...confirmation, lang: pageLang || locale }
+        const note = clipBytes(confirmation.comment?.trim() ?? '')
+        const body = { ...draft, lang: pageLang || locale, ...(note && { comment: note }) }
         await send({ type: 'typo', age: 0, url: location.href, body })
-        debug('sent', { selection: draft.selection, transport })
+        debug('sent', { selection: draft.selection, transport, comment: Boolean(note) })
       } catch (error) {
         debug('not sent', { error })
       } finally {
