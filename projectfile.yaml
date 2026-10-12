@@ -1,0 +1,112 @@
+---
+# SPDX-FileCopyrightText: 2026 Damián Búho <damian.buho@proton.me>
+#
+# SPDX-License-Identifier: MIT
+$schema: https://projectfile.org/schema/v1.json
+identity:
+  created: "2026-10-12"
+  name: report-typo
+  namespace: me.dbuho
+  summary:
+    en: Ctrl+Enter typo reporting for any website
+    es: Aviso de erratas con Ctrl+Enter para cualquier sitio web
+    uk: Повідомлення про одруківки через Ctrl+Enter для будь-якого сайту
+  title: Report Typo
+  description:
+    en: A browser library that lets readers report a typo by selecting it and pressing Ctrl+Enter (Cmd+Enter on macOS). The report, with the text around the selection, goes to a report-relay endpoint, a webhook, or a function of your own.
+    es: Una biblioteca de navegador que permite a los lectores avisar de una errata seleccionándola y pulsando Ctrl+Enter (Cmd+Enter en macOS). El aviso, con el texto que rodea la selección, va a un endpoint de report-relay, a un webhook o a una función propia.
+    uk: Бібліотека для браузера, з якою читачі повідомляють про одруківку, виділивши її й натиснувши Ctrl+Enter (Cmd+Enter на macOS). Звіт разом із текстом довкола виділення надходить до report-relay, на вебхук або до вашої власної функції.
+includes:
+  - .makefile/core/ci.yaml
+  - .makefile/library/languages/node.yaml
+  - .makefile/library/traits/node-publish.yaml
+  - https://kiota.ch/damian-buho/metadata/raw/branch/main/forge/codeberg.yaml
+  - https://kiota.ch/damian-buho/metadata/raw/branch/main/forge/github.yaml
+  - https://kiota.ch/damian-buho/metadata/raw/branch/main/include.yaml
+keywords:
+  - typo
+  - orphus
+  - proofreading
+  - reporting-api
+  - browser
+kind: SoftwareSourceCode
+license:
+  spdx: MIT
+links:
+  - label:
+      en: Report Typo on kiota.ch
+      es: Report Typo en kiota.ch
+      uk: Report Typo на kiota.ch
+    preferred: true
+    priority: 10
+    type: source-code
+    url: https://kiota.ch/damian-buho/report-typo
+  - label:
+      en: Report Typo on GitHub
+      es: Report Typo en GitHub
+      uk: Report Typo на GitHub
+    priority: 80
+    tags:
+      - public
+      - badges
+      - badges-github
+    type: source-code
+    url: https://github.com/damian-buho/report-typo
+  - label:
+      en: Issues on GitHub
+      es: Incidencias en GitHub
+      uk: Задачі на GitHub
+    priority: 80
+    tags:
+      - support
+      - readme
+    type: bugs
+    url: https://github.com/damian-buho/report-typo/issues
+  - label:
+      en: Report Typo on Codeberg
+      es: Report Typo en Codeberg
+      uk: Report Typo на Codeberg
+    priority: 90
+    tags:
+      - public
+      - badges
+      - badges-gitea
+    type: source-code
+    url: https://codeberg.org/damian-buho/report-typo
+  - label:
+      en: Issues on Codeberg
+      es: Incidencias en Codeberg
+      uk: Задачі на Codeberg
+    priority: 90
+    tags:
+      - support
+    type: bugs
+    url: https://codeberg.org/damian-buho/report-typo/issues
+  - label:
+      en: Package on npm
+      es: Paquete en npm
+      uk: Пакунок на npm
+    type: package-registry
+    url: https://www.npmjs.com/package/@damian-buho/report-typo
+org:
+  projectfile:
+    artifacts:
+      npm-package:
+        name: "@damian-buho/report-typo"
+        browser: true
+    status: experimental
+repositories:
+  - branch: main
+    role: origin
+    type: git
+    url: ssh://git@kiota.ch/damian-buho/report-typo.git
+  - packages: true
+    role: mirror
+    type: git
+    url: git@github.com:damian-buho/report-typo.git
+  - role: mirror
+    type: git
+    url: git@codeberg.org:damian-buho/report-typo.git
+technologies:
+  - node
+  - typescript
