@@ -42,7 +42,7 @@ export function create(catalog: Record<string, Messages>) {
       transport = 'relay',
       format,
       maxSelection = 256,
-      cooldownMs = 10_000,
+      cooldownMs = 2000,
       comment = false
     } = options
     if (!endpoint && !options.send) throw new TypeError('report-typo: set `endpoint` or `send`')

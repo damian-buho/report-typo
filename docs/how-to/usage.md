@@ -39,7 +39,7 @@ Content-Security-Policy: connect-src 'self' https://relay.example.com
 | `send`         | —         | Your own `(report) => Promise<void>`; replaces the transport          |
 | `locale`       | page lang | Dialog language                                                       |
 | `maxSelection` | `256`     | Longest selection sent, in characters                                 |
-| `cooldownMs`   | `10000`   | Pause after a report before the next one, kept in memory only         |
+| `cooldownMs`   | `2000`    | Pause after a report before the next one, kept in memory only         |
 | `comment`      | `false`   | Adds an optional comment field to the built-in dialog                 |
 | `ui`           | —         | Your own dialog, see below; replaces the built-in one                 |
 
