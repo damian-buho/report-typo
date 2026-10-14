@@ -46,8 +46,10 @@ export function create(catalog: Record<string, Messages>) {
       comment = false
     } = options
     if (!endpoint && !options.send) throw new TypeError('report-typo: set `endpoint` or `send`')
-    const send =
-      options.send ?? (transport === 'webhook' ? webhook(endpoint!, format) : relay(endpoint!))
+    let send: Send
+    if (options.send) send = options.send
+    else if (endpoint === undefined) throw new TypeError('report-typo: set `endpoint` or `send`')
+    else send = transport === 'webhook' ? webhook(endpoint, format) : relay(endpoint)
     const pageLang = document.documentElement.lang
     const [locale, messages] = pick(catalog, options.locale ?? (pageLang || navigator.language))
     const ui = options.ui ?? (draft => confirm(draft, messages, locale, comment))

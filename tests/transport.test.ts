@@ -27,7 +27,9 @@ describe('relay', () => {
   it('posts the Reporting API envelope without credentials', async () => {
     const fetch = answer(204)
     await relay('https://relay.example/')(report)
-    const [url, init] = fetch.mock.calls[0]!.arguments as [string, RequestInit]
+    const first = fetch.mock.calls[0]
+    assert.ok(first)
+    const [url, init] = first.arguments as [string, RequestInit]
     assert.equal(url, 'https://relay.example/')
     assert.equal(init.credentials, 'omit')
     assert.equal(init.keepalive, true)
@@ -78,7 +80,9 @@ describe('webhook', () => {
   it('posts the formatted JSON', async () => {
     const fetch = answer(200)
     await webhook('https://hooks.example/', r => ({ text: r.body.selection }))(report)
-    const [, init] = fetch.mock.calls[0]!.arguments as [string, RequestInit]
+    const only = fetch.mock.calls[0]
+    assert.ok(only)
+    const [, init] = only.arguments as [string, RequestInit]
     assert.deepEqual(JSON.parse(init.body as string), { text: 'tpyo' })
   })
 })

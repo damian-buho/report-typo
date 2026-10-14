@@ -14,10 +14,10 @@ import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
   {
-    ignores: ['coverage/', 'node_modules/', 'tmp/', 'out/', 'dist/']
+    ignores: ['coverage/', 'node_modules/', 'tmp/', 'out/', 'dist/', '**/*.tmp.*']
   },
   js.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...tseslint.configs.strict,
   nPlugin.configs['flat/recommended-module'],
   flatConfigs.recommended,
   promisePlugin.configs['flat/recommended'],
@@ -55,7 +55,8 @@ export default tseslint.config(
         'warn',
         {
           argsIgnorePattern: '^_',
-          varsIgnorePattern: '^_'
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true
         }
       ]
     }
