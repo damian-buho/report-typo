@@ -45,11 +45,23 @@
     "format:check": "prettier --check 'src/**/*.ts' 'tests/**/*.ts'"
   },
   "keywords": [
-    "typo",
+    "browser",
+    "copyediting",
+    "crowdsourcing",
+    "dialog",
+    "feedback-widget",
+    "i18n",
+    "javascript",
+    "keyboard-shortcuts",
     "orphus",
     "proofreading",
     "reporting-api",
-    "browser"
+    "shadow-dom",
+    "spellcheck",
+    "typo",
+    "user-feedback",
+    "vanilla-js",
+    "webhook"
   ],
   "author": {
     "email": "damian.buho@proton.me",

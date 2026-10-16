@@ -24,11 +24,23 @@ contact:
     orcid: https://orcid.org/0009-0004-8579-7633
     website: https://dbuho.me
 keywords:
-  - typo
+  - browser
+  - copyediting
+  - crowdsourcing
+  - dialog
+  - feedback-widget
+  - i18n
+  - javascript
+  - keyboard-shortcuts
   - orphus
   - proofreading
   - reporting-api
-  - browser
+  - shadow-dom
+  - spellcheck
+  - typo
+  - user-feedback
+  - vanilla-js
+  - webhook
 license: MIT
 repository-code: https://kiota.ch/damian-buho/report-typo
 version: 0.2.2
