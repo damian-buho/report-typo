@@ -18,6 +18,7 @@ identity:
     uk: Бібліотека для браузера, з якою читачі повідомляють про одруківку, виділивши її й натиснувши Ctrl+Enter (Cmd+Enter на macOS). Звіт разом із текстом довкола виділення надходить до report-relay, на вебхук або до вашої власної функції.
   version: 0.2.2
   released: "2026-10-16"
+  visibility: public
 includes:
   - .makefile/core/ci.yaml
   - .makefile/core/traits/release.yaml
