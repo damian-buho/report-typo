@@ -25,6 +25,6 @@ git clone --recurse-submodules https://codeberg.org/damian-buho/report-typo repo
 - `make analyzed` — Запускає важкий аналіз (мутаційне тестування, бенчмарки)
 - `make audited` — Повторно сканує закріплені залежності й опубліковані артефакти на нові вразливості
 - `make check-outdated` — Звітує про кожну закріплену залежність, що відстає від upstream
-- `make ready-to-publish` — Запускає псевдо-CI локально — збирає, тестує й сканує без публікації
+- `make release-is-ready` — Запускає псевдо-CI локально — збирає, тестує й сканує без публікації
 
 <!-- textlint-enable -->
