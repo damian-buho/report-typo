@@ -21,8 +21,6 @@ env:
 jobs:
   check-outdated:
     runs-on: docker
-    needs: ["dependencies-are-installed"]
-    if: ${{ !cancelled() && needs.dependencies-are-installed.result == 'success' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -46,7 +44,3 @@ jobs:
           env: |-
             M6E_CHECK_OUTDATED_STRICT
           mounts: /app/data/ci-cache/npm:/app/.cache/npm:rw
-  dependencies-are-installed:
-    runs-on: docker
-    steps:
-      - run: echo dependencies-are-installed

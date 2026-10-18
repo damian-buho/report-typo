@@ -23,8 +23,6 @@ env:
 jobs:
   check-outdated:
     runs-on: ubuntu-26.04
-    needs: ["dependencies-are-installed"]
-    if: ${{ !cancelled() && needs.dependencies-are-installed.result == 'success' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -67,7 +65,3 @@ jobs:
         with:
           path: ${{ runner.temp }}/ci-cache/npm
           key: ci-cache-npm-${{ steps.stamp-npm.outputs.stamp }}
-  dependencies-are-installed:
-    runs-on: ubuntu-26.04
-    steps:
-      - run: echo dependencies-are-installed
