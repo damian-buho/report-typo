@@ -21,15 +21,15 @@ env:
 jobs:
   check-outdated:
     runs-on: docker
-    needs: ["deps-installed"]
-    if: ${{ !cancelled() && needs.deps-installed.result == 'success' }}
+    needs: ["dependencies-are-installed"]
+    if: ${{ !cancelled() && needs.dependencies-are-installed.result == 'success' }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           submodules: true
           persist-credentials: false
       - name: npm-install
-        if: vars.CI_SKIP_DEPS_INSTALLED != 'true' && vars.CI_SKIP_NPM_INSTALL != 'true'
+        if: vars.CI_SKIP_DEPENDENCIES_ARE_INSTALLED != 'true' && vars.CI_SKIP_NPM_INSTALL != 'true'
         uses: projectfile/actions/run-tool@c8edccbe27c66f1ecff02f32d1ca904870c99ed4 # v1
         with:
           image: ${{ vars.NODE_TOOL_IMAGE || format('{0}/b19/node', vars.SOURCE_DOCKER_REGISTRY || 'kiota.ch') }}
@@ -46,7 +46,7 @@ jobs:
           env: |-
             M6E_CHECK_OUTDATED_STRICT
           mounts: /app/data/ci-cache/npm:/app/.cache/npm:rw
-  deps-installed:
+  dependencies-are-installed:
     runs-on: docker
     steps:
-      - run: echo deps-installed
+      - run: echo dependencies-are-installed
