@@ -32,7 +32,8 @@ export default defineConfig(
         outDir: 'dist/test',
         clean: false,
         platform: 'node' as const,
-        removeNodeProtocol: false
+        removeNodeProtocol: false,
+        external: ['happy-dom']
       }
     : {
         ...shared,

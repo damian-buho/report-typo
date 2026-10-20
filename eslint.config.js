@@ -14,7 +14,7 @@ import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
   {
-    ignores: ['coverage/', 'node_modules/', 'tmp/', 'out/', 'dist/', '**/*.tmp.*']
+    ignores: ['coverage/', 'node_modules/', 'tmp/', 'out/', 'dist/', '.stryker-tmp/', '**/*.tmp.*']
   },
   js.configs.recommended,
   ...tseslint.configs.strict,
@@ -70,7 +70,8 @@ export default tseslint.config(
   {
     files: ['tests/**/*.ts'],
     rules: {
-      'n/no-missing-import': 'off'
+      'n/no-missing-import': 'off',
+      'unicorn/no-null': 'off'
     }
   },
   {

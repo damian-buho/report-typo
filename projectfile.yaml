@@ -114,6 +114,23 @@ org:
     build:
       args:
         B19_NODE_SERIES: 26
+    ignores:
+      git:
+        include:
+          - reports/
+          - .makefile/bootstrap
+          - .worktrees/
+          - .npm/
+          - .pnpm-store/
+          - .stryker-tmp/
+          - build/
+          - dist/
+          - node_modules/
+          - npm-debug.log*
+          - pnpm-debug.log*
+          - tsconfig.tsbuildinfo
+          - yarn-debug.log*
+          - yarn-error.log*
     status: experimental
 repositories:
   - branch: main

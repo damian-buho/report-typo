@@ -41,6 +41,7 @@
     "check-size": "size-limit",
     "prepublishOnly": "npm run build",
     "lint": "eslint ./",
+    "mutate": "stryker run --concurrency 1",
     "format": "prettier --write 'src/**/*.ts' 'tests/**/*.ts'",
     "format:check": "prettier --check 'src/**/*.ts' 'tests/**/*.ts'"
   },
@@ -83,6 +84,7 @@
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@size-limit/preset-small-lib": "14.2.0",
+    "@stryker-mutator/core": "10.0.0",
     "@types/eslint": "9.6.1",
     "@types/node": "26.6.5",
     "esbuild": "0.28.2",
@@ -94,6 +96,7 @@
     "eslint-plugin-tsdoc": "0.5.4",
     "eslint-plugin-unicorn": "78.0.0",
     "globals": "17.13.0",
+    "happy-dom": "21.0.3",
     "prettier": "3.9.10",
     "size-limit": "14.2.0",
     "tsup": "9.0.0",

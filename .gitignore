@@ -13,6 +13,7 @@
 .npm/
 .pnpm-store/
 .secrets/
+.stryker-tmp/
 .worktrees/
 build/
 dist/
