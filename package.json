@@ -1,6 +1,6 @@
 {
   "name": "report-typo",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "type": "module",
   "description": "Ctrl+Enter typo reporting for any website",
   "main": "dist/index.js",
