@@ -621,7 +621,7 @@ Migrate to leaner dependency replacements
 
 Lint JavaScript and TypeScript
 
-`auto-eslint`
+`auto-eslint --max-warnings=${org.projectfile.eslint.max-warnings}`
 
 > Image: D9T_JS_TOOLS_IMAGE
 
