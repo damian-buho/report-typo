@@ -16,8 +16,8 @@ identity:
     en: A browser library that lets readers report a typo by selecting it and pressing Ctrl+Enter (Cmd+Enter on macOS). The report, with the text around the selection, goes to a report-relay endpoint, a webhook, or a function of your own.
     es: Una biblioteca de navegador que permite a los lectores avisar de una errata seleccionándola y pulsando Ctrl+Enter (Cmd+Enter en macOS). El aviso, con el texto que rodea la selección, va a un endpoint de report-relay, a un webhook o a una función propia.
     uk: Бібліотека для браузера, з якою читачі повідомляють про одруківку, виділивши її й натиснувши Ctrl+Enter (Cmd+Enter на macOS). Звіт разом із текстом довкола виділення надходить до report-relay, на вебхук або до вашої власної функції.
-  version: 0.2.8
-  released: "2026-10-25"
+  version: 0.2.9
+  released: "2026-10-27"
   modified: "2026-10-16"
   visibility: public
 includes:
