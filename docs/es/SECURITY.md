@@ -63,4 +63,16 @@ gpg --encrypt --armor --recipient B64C122EE16C3746 message.txt
 Report Typo no ofrece actualmente un programa de recompensas. Aun así
 agradecemos los informes divulgados de forma responsable — consulta el canal de
 contacto anterior.
+
+## Vulnerabilidades reconocidas
+
+Los siguientes hallazgos fueron revisados y se suprimen de forma intencionada
+(la corrección depende de una versión posterior del proyecto base o el aviso no
+aplica a este proyecto):
+
+| ID | Motivo |
+| --- | --- |
+| CVE-2026-118764 | no patch for 10.x |
+| GHSA-g3hv-75wg-m249 | no patch for 10.x |
+
 <!-- textlint-enable -->

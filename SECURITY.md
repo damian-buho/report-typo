@@ -61,3 +61,13 @@ gpg --encrypt --armor --recipient B64C122EE16C3746 message.txt
 
 Report Typo does not currently run a bug bounty programme. We still welcome
 responsibly disclosed reports — see the contact channel above.
+
+## Acknowledged Vulnerabilities
+
+The following findings were reviewed and are intentionally suppressed (a fix
+depends on an upstream release, or the advisory does not apply to this project):
+
+| ID | Reason |
+| --- | --- |
+| CVE-2026-118764 | no patch for 10.x |
+| GHSA-g3hv-75wg-m249 | no patch for 10.x |
