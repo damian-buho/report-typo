@@ -74,7 +74,7 @@
         "refresh": 2,
         "includeAll": true,
         "multi": true,
-        "allValue": ".*",
+        "allValue": ".+",
         "sort": 1,
         "hide": 0,
         "current": {
@@ -423,7 +423,8 @@
               "selection": "Typo",
               "after": "After",
               "comment": "Comment",
-              "Value": "Reports"
+              "Value": "Reports",
+              "Value #A": "Reports"
             },
             "indexByName": {
               "site": 0,
@@ -432,7 +433,8 @@
               "selection": 3,
               "after": 4,
               "comment": 5,
-              "Value": 6
+              "Value": 6,
+              "Value #A": 6
             }
           }
         },
@@ -526,7 +528,7 @@
             "type": "loki",
             "uid": "${loki}"
           },
-          "expr": "sum by (site) (count_over_time({service_name=~\"$service\", event_name=\"typo\"} | json site=`attributes[\"report.url_host\"]`, page=`attributes[\"report.url\"]`, selection=`attributes[\"report.selection\"]`, prefix=`attributes[\"report.prefix\"]`, suffix=`attributes[\"report.suffix\"]`, comment=`attributes[\"report.comment\"]`, lang=`attributes[\"report.lang\"]`, link=`attributes[\"report.text_fragment\"]` | site=~\"$site\" | lang=~\"$lang\" [$__auto]))",
+          "expr": "sum by (site) (count_over_time({service_name=~\"$service\", event_name=\"typo\"} | json site=`attributes[\"report.url_host\"]`, page=`attributes[\"report.url\"]`, selection=`attributes[\"report.selection\"]`, prefix=`attributes[\"report.prefix\"]`, suffix=`attributes[\"report.suffix\"]`, comment=`attributes[\"report.comment\"]`, lang=`attributes[\"report.lang\"]`, link=`attributes[\"report.text_fragment\"]` | site=~\"$site\" | lang=~\"$lang\" [$__interval]))",
           "editorMode": "code",
           "legendFormat": "{{site}}",
           "queryType": "range"
@@ -541,10 +543,10 @@
           },
           "custom": {
             "drawStyle": "bars",
-            "lineWidth": 2,
+            "lineWidth": 1,
             "fillOpacity": 80,
             "pointSize": 8,
-            "showPoints": "never",
+            "showPoints": "always",
             "barAlignment": 0,
             "spanNulls": false,
             "stacking": {
@@ -579,7 +581,8 @@
         "w": 12,
         "x": 0,
         "y": 16
-      }
+      },
+      "interval": "1h"
     },
     {
       "type": "bargauge",
@@ -618,9 +621,9 @@
         "orientation": "horizontal",
         "displayMode": "basic",
         "showUnfilled": true,
-        "valueMode": "text",
+        "valueMode": "color",
         "namePlacement": "left",
-        "sizing": "auto",
+        "sizing": "manual",
         "minVizHeight": 16,
         "maxVizHeight": 24,
         "reduceOptions": {
@@ -676,9 +679,9 @@
         "orientation": "horizontal",
         "displayMode": "basic",
         "showUnfilled": true,
-        "valueMode": "text",
+        "valueMode": "color",
         "namePlacement": "left",
-        "sizing": "auto",
+        "sizing": "manual",
         "minVizHeight": 16,
         "maxVizHeight": 24,
         "reduceOptions": {
