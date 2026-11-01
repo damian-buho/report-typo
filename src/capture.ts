@@ -48,6 +48,26 @@ export function toDraft(before: string, selected: string, after: string, max: nu
   }
 }
 
+/** Collects the rendered text nodes of a subtree, skipping non-rendered and hidden ones. */
+function renderedTextNodes(scope: Node): Text[] {
+  const nodes: Text[] = []
+  const walker = document.createTreeWalker(scope, 5, {
+    acceptNode(node) {
+      if (node.nodeType === 3) return 1
+      const element = node as Element
+      return '|SCRIPT|STYLE|TEMPLATE|NOSCRIPT|'.includes('|' + element.tagName + '|') ||
+        element.hasAttribute('hidden') ||
+        element.getAttribute('aria-hidden') === 'true'
+        ? 2
+        : 3
+    }
+  })
+  for (let node = walker.firstChild(); node; node = walker.nextNode()) {
+    if (node.nodeType === 3) nodes.push(node as Text)
+  }
+  return nodes
+}
+
 /** Reads the current selection and its surrounding text from the page. */
 export function capture(selection: Selection | null, max: number): Draft | undefined {
   if (!selection || selection.isCollapsed || selection.rangeCount === 0) return
@@ -55,12 +75,56 @@ export function capture(selection: Selection | null, max: number): Draft | undef
   const common = range.commonAncestorContainer
   const scope =
     (common instanceof Element ? common : common.parentElement)?.closest(BLOCK) ?? document.body
-  const before = document.createRange()
-  before.selectNodeContents(scope)
-  before.setEnd(range.startContainer, range.startOffset)
-  const after = document.createRange()
-  after.selectNodeContents(scope)
-  after.setStart(range.endContainer, range.endOffset)
-  const draft = toDraft(before.toString(), range.toString(), after.toString(), max)
+
+  if (typeof range.comparePoint !== 'function') {
+    const before = document.createRange()
+    before.selectNodeContents(scope)
+    before.setEnd(range.startContainer, range.startOffset)
+    const after = document.createRange()
+    after.selectNodeContents(scope)
+    after.setStart(range.endContainer, range.endOffset)
+    const draft = toDraft(before.toString(), range.toString(), after.toString(), max)
+    return draft.selection ? draft : undefined
+  }
+
+  const nodes = renderedTextNodes(scope)
+
+  let beforeText = ''
+  for (const node of nodes) {
+    if (node === range.startContainer) {
+      beforeText += node.data.slice(0, range.startOffset)
+      break
+    }
+    if (range.comparePoint(node, node.data.length) < 0) beforeText += node.data
+    else break
+  }
+
+  let selectedText = ''
+  for (const node of nodes) {
+    if (range.comparePoint(node, node.data.length) < 0) continue
+    if (range.comparePoint(node, 0) > 0) break
+    let from = 0
+    let to = node.data.length
+    if (node === range.startContainer) from = range.startOffset
+    if (node === range.endContainer) to = range.endOffset
+    if (to > from) selectedText += node.data.slice(from, to)
+  }
+  if (!selectedText) selectedText = range.toString()
+
+  let afterText = ''
+  let hasStarted = false
+  for (const node of nodes) {
+    if (hasStarted) {
+      afterText += node.data
+    } else if (node === range.endContainer) {
+      afterText += node.data.slice(range.endOffset)
+      hasStarted = true
+    } else if (range.comparePoint(node, 0) > 0) {
+      afterText += node.data
+      hasStarted = true
+    }
+  }
+
+  const draft = toDraft(beforeText, selectedText, afterText, max)
   return draft.selection ? draft : undefined
 }

@@ -19,6 +19,7 @@ export interface Options {
   cooldownMs?: number
   comment?: boolean
   ui?: Ui
+  url?: 'full' | 'path' | 'origin' | ((location: Location) => string)
 }
 
 const debug = (message: string, data: unknown): void =>
@@ -34,6 +35,45 @@ export function pick(catalog: Record<string, Messages>, tag: string): [string, M
   return first
 }
 
+/** Resolves the page URL to send, per the `url` option, dropping the fragment. */
+export function resolveUrl(
+  option: Options['url'],
+  location: Location = globalThis.location
+): string {
+  const fallback = location.origin + location.pathname
+  if (typeof option === 'function') {
+    const candidate = option(location)
+    let parsed: URL
+    try {
+      parsed = new URL(candidate)
+    } catch {
+      console.debug('report-typo: invalid url option, falling back to path', { value: candidate })
+      return fallback
+    }
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:' || parsed.host === '') {
+      console.debug('report-typo: invalid url option, falling back to path', { value: candidate })
+      return fallback
+    }
+    parsed.hash = ''
+    if (parsed.search === '?') parsed.search = ''
+    return parsed.origin + parsed.pathname + parsed.search
+  }
+  switch (option) {
+    case 'full': {
+      const parsed = new URL(location.href)
+      parsed.hash = ''
+      if (parsed.search === '?') parsed.search = ''
+      return parsed.origin + parsed.pathname + parsed.search
+    }
+    case 'origin': {
+      return location.origin
+    }
+    default: {
+      return fallback
+    }
+  }
+}
+
 /** Builds `reportTypo` over a locale catalog, so each bundle ships only the locales it imports. */
 export function create(catalog: Record<string, Messages>) {
   return function reportTypo(options: Options): () => void {
@@ -43,7 +83,8 @@ export function create(catalog: Record<string, Messages>) {
       format,
       maxSelection = 256,
       cooldownMs = 2000,
-      comment = false
+      comment = false,
+      url = 'path'
     } = options
     if (!endpoint && !options.send) throw new TypeError('report-typo: set `endpoint` or `send`')
     let send: Send
@@ -72,7 +113,7 @@ export function create(catalog: Record<string, Messages>) {
         last = Date.now()
         const note = clipBytes(confirmation.comment?.trim() ?? '')
         const body = { ...draft, lang: pageLang || locale, ...(note && { comment: note }) }
-        await send({ type: 'typo', age: 0, url: location.href, body })
+        await send({ type: 'typo', age: 0, url: resolveUrl(url, location), body })
         debug('sent', { selection: draft.selection, transport, comment: Boolean(note) })
       } catch (error) {
         debug('not sent', { error })

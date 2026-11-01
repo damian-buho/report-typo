@@ -42,7 +42,9 @@ Content-Security-Policy: connect-src 'self' https://relay.example.com
 | `cooldownMs`   | `2000`    | Pause after a report before the next one, kept in memory only         |
 | `comment`      | `false`   | Adds an optional comment field to the built-in dialog                 |
 | `ui`           | —         | Your own dialog, see below; replaces the built-in one                 |
+| `url`          | `'path'`  | How much of the page URL to send: `'full'`, `'path'`, `'origin'`, or a function `(location) => string` |
 
+The default sends only the origin and path, never the query or fragment. Choose `'full'` to keep the query string, but note it only survives when the relay runs with `REPORT_RELAY_KEEP_QUERY=true`; otherwise the relay strips it again. A function receives the page’s `Location` and returns the canonical URL the site wants reported. The fragment is always dropped, because the relay appends `#:~:text=…`.
 ## Match the dialog to your site
 
 The built-in dialog reads these custom properties, set on `report-typo` or any ancestor:

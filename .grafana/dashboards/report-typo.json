@@ -393,7 +393,7 @@
             "type": "loki",
             "uid": "${loki}"
           },
-          "expr": "sum by (site, lang, before, selection, after, comment, link) (count_over_time({service_name=~\"$service\", event_name=\"typo\"} | json site=`attributes[\"report.url_host\"]`, page=`attributes[\"report.url\"]`, selection=`attributes[\"report.selection\"]`, prefix=`attributes[\"report.prefix\"]`, suffix=`attributes[\"report.suffix\"]`, comment=`attributes[\"report.comment\"]`, lang=`attributes[\"report.lang\"]`, link=`attributes[\"report.text_fragment\"]` | site=~\"$site\" | lang=~\"$lang\" | label_format before=`{{ trunc -40 .prefix }}`, after=`{{ trunc 40 .suffix }}` [$__range]))",
+          "expr": "sum by (site, page, lang, before, selection, after, comment, link) (count_over_time({service_name=~\"$service\", event_name=\"typo\"} | json site=`attributes[\"report.url_host\"]`, page=`attributes[\"report.url\"]`, selection=`attributes[\"report.selection\"]`, prefix=`attributes[\"report.prefix\"]`, suffix=`attributes[\"report.suffix\"]`, comment=`attributes[\"report.comment\"]`, lang=`attributes[\"report.lang\"]`, link=`attributes[\"report.text_fragment\"]` | site=~\"$site\" | lang=~\"$lang\" | label_format before=`{{ trunc -40 .prefix }}`, after=`{{ trunc 40 .suffix }}`, page=`{{ regexReplaceAll \"^https?://[^/]+\" .page \"\" }}` [$__range]))",
           "editorMode": "code",
           "queryType": "instant"
         }
@@ -418,6 +418,7 @@
             },
             "renameByName": {
               "site": "Site",
+              "page": "Page",
               "lang": "Language",
               "before": "Before",
               "selection": "Typo",
@@ -428,13 +429,14 @@
             },
             "indexByName": {
               "site": 0,
-              "lang": 1,
-              "before": 2,
-              "selection": 3,
-              "after": 4,
-              "comment": 5,
-              "Value": 6,
-              "Value #A": 6
+              "page": 1,
+              "lang": 2,
+              "before": 3,
+              "selection": 4,
+              "after": 5,
+              "comment": 6,
+              "Value": 7,
+              "Value #A": 7
             }
           }
         },
@@ -482,6 +484,24 @@
             "matcher": {
               "id": "byName",
               "options": "Typo"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Open the page at this typo",
+                    "url": "${__data.fields.link}",
+                    "targetBlank": true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Page"
             },
             "properties": [
               {
