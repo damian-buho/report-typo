@@ -1,0 +1,739 @@
+{
+  "uid": "report-typo",
+  "title": "Report Typo",
+  "description": "Typo reports readers sent with @damian-buho/report-typo, delivered through report-relay to Loki: an inbox of distinct typos with links that open each one in place.",
+  "tags": [
+    "report-typo",
+    "reporting"
+  ],
+  "editable": true,
+  "graphTooltip": 1,
+  "schemaVersion": 41,
+  "version": 1,
+  "refresh": "5m",
+  "timezone": "browser",
+  "fiscalYearStartMonth": 0,
+  "liveNow": false,
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "weekStart": "",
+  "id": null,
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "links": [
+    {
+      "title": "Report Relay",
+      "type": "dashboards",
+      "tags": [
+        "report-relay"
+      ],
+      "asDropdown": false,
+      "includeVars": false,
+      "keepTime": true
+    }
+  ],
+  "templating": {
+    "list": [
+      {
+        "name": "loki",
+        "label": "Logs",
+        "type": "datasource",
+        "query": "loki",
+        "hide": 0,
+        "refresh": 1,
+        "regex": "",
+        "current": {}
+      },
+      {
+        "name": "service",
+        "label": "Service",
+        "type": "query",
+        "datasource": {
+          "type": "loki",
+          "uid": "${loki}"
+        },
+        "query": "label_values({event_name=\"typo\"}, service_name)",
+        "definition": "label_values({event_name=\"typo\"}, service_name)",
+        "refresh": 2,
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".*",
+        "sort": 1,
+        "hide": 0,
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        }
+      },
+      {
+        "name": "site",
+        "label": "Site (regex)",
+        "type": "textbox",
+        "query": ".*",
+        "hide": 0,
+        "current": {
+          "text": ".*",
+          "value": ".*"
+        },
+        "options": [
+          {
+            "selected": true,
+            "text": ".*",
+            "value": ".*"
+          }
+        ]
+      },
+      {
+        "name": "lang",
+        "label": "Language (regex)",
+        "type": "textbox",
+        "query": ".*",
+        "hide": 0,
+        "current": {
+          "text": ".*",
+          "value": ".*"
+        },
+        "options": [
+          {
+            "selected": true,
+            "text": ".*",
+            "value": ".*"
+          }
+        ]
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Typos reported",
+      "description": "Typo reports over the selected range, duplicates included.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki}"
+          },
+          "expr": "sum(count_over_time({service_name=~\"$service\", event_name=\"typo\"} | json site=`attributes[\"report.url_host\"]`, page=`attributes[\"report.url\"]`, selection=`attributes[\"report.selection\"]`, prefix=`attributes[\"report.prefix\"]`, suffix=`attributes[\"report.suffix\"]`, comment=`attributes[\"report.comment\"]`, lang=`attributes[\"report.lang\"]`, link=`attributes[\"report.text_fragment\"]` | site=~\"$site\" | lang=~\"$lang\" [$__range]))",
+          "editorMode": "code",
+          "queryType": "instant"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "noValue": "0",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "text"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center",
+        "orientation": "auto"
+      },
+      "id": 1,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Distinct typos",
+      "description": "Different text selections reported; one typo seen by many readers counts once.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki}"
+          },
+          "expr": "count(sum by (page, selection) (count_over_time({service_name=~\"$service\", event_name=\"typo\"} | json site=`attributes[\"report.url_host\"]`, page=`attributes[\"report.url\"]`, selection=`attributes[\"report.selection\"]`, prefix=`attributes[\"report.prefix\"]`, suffix=`attributes[\"report.suffix\"]`, comment=`attributes[\"report.comment\"]`, lang=`attributes[\"report.lang\"]`, link=`attributes[\"report.text_fragment\"]` | site=~\"$site\" | lang=~\"$lang\" [$__range])))",
+          "editorMode": "code",
+          "queryType": "instant"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "noValue": "0",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "text"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center",
+        "orientation": "auto"
+      },
+      "id": 2,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Pages affected",
+      "description": "Pages with at least one typo report.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki}"
+          },
+          "expr": "count(sum by (page) (count_over_time({service_name=~\"$service\", event_name=\"typo\"} | json site=`attributes[\"report.url_host\"]`, page=`attributes[\"report.url\"]`, selection=`attributes[\"report.selection\"]`, prefix=`attributes[\"report.prefix\"]`, suffix=`attributes[\"report.suffix\"]`, comment=`attributes[\"report.comment\"]`, lang=`attributes[\"report.lang\"]`, link=`attributes[\"report.text_fragment\"]` | site=~\"$site\" | lang=~\"$lang\" [$__range])))",
+          "editorMode": "code",
+          "queryType": "instant"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "noValue": "0",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "text"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center",
+        "orientation": "auto"
+      },
+      "id": 3,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      }
+    },
+    {
+      "type": "stat",
+      "title": "With a comment",
+      "description": "Reports where the reader explained the fix.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki}"
+          },
+          "expr": "sum(count_over_time({service_name=~\"$service\", event_name=\"typo\"} | json site=`attributes[\"report.url_host\"]`, page=`attributes[\"report.url\"]`, selection=`attributes[\"report.selection\"]`, prefix=`attributes[\"report.prefix\"]`, suffix=`attributes[\"report.suffix\"]`, comment=`attributes[\"report.comment\"]`, lang=`attributes[\"report.lang\"]`, link=`attributes[\"report.text_fragment\"]` | site=~\"$site\" | lang=~\"$lang\" | comment != \"\" [$__range]))",
+          "editorMode": "code",
+          "queryType": "instant"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "noValue": "0",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "text"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center",
+        "orientation": "auto"
+      },
+      "id": 4,
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      }
+    },
+    {
+      "type": "table",
+      "title": "Inbox",
+      "description": "One row per distinct typo, most reported first. The page link opens it with the typo scrolled into view and highlighted (text fragment).",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki}"
+          },
+          "expr": "sum by (site, lang, before, selection, after, comment, link) (count_over_time({service_name=~\"$service\", event_name=\"typo\"} | json site=`attributes[\"report.url_host\"]`, page=`attributes[\"report.url\"]`, selection=`attributes[\"report.selection\"]`, prefix=`attributes[\"report.prefix\"]`, suffix=`attributes[\"report.suffix\"]`, comment=`attributes[\"report.comment\"]`, lang=`attributes[\"report.lang\"]`, link=`attributes[\"report.text_fragment\"]` | site=~\"$site\" | lang=~\"$lang\" | label_format before=`{{ trunc -40 .prefix }}`, after=`{{ trunc 40 .suffix }}` [$__range]))",
+          "editorMode": "code",
+          "queryType": "instant"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "link": true
+            },
+            "renameByName": {
+              "site": "Site",
+              "lang": "Language",
+              "before": "Before",
+              "selection": "Typo",
+              "after": "After",
+              "comment": "Comment",
+              "Value": "Reports"
+            },
+            "indexByName": {
+              "site": 0,
+              "lang": 1,
+              "before": 2,
+              "selection": 3,
+              "after": 4,
+              "comment": 5,
+              "Value": 6
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "field": "Reports",
+                "desc": true
+              }
+            ]
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": true,
+            "filterable": true
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reports"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 90
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Typo"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Open the page at this typo",
+                    "url": "${__data.fields.link}",
+                    "targetBlank": true
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        }
+      },
+      "id": 5,
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 4
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Reports per site",
+      "description": "Typo reports over time, stacked by site.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki}"
+          },
+          "expr": "sum by (site) (count_over_time({service_name=~\"$service\", event_name=\"typo\"} | json site=`attributes[\"report.url_host\"]`, page=`attributes[\"report.url\"]`, selection=`attributes[\"report.selection\"]`, prefix=`attributes[\"report.prefix\"]`, suffix=`attributes[\"report.suffix\"]`, comment=`attributes[\"report.comment\"]`, lang=`attributes[\"report.lang\"]`, link=`attributes[\"report.text_fragment\"]` | site=~\"$site\" | lang=~\"$lang\" [$__auto]))",
+          "editorMode": "code",
+          "legendFormat": "{{site}}",
+          "queryType": "range"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "bars",
+            "lineWidth": 2,
+            "fillOpacity": 80,
+            "pointSize": 8,
+            "showPoints": "never",
+            "barAlignment": 0,
+            "spanNulls": false,
+            "stacking": {
+              "mode": "normal",
+              "group": "A"
+            },
+            "axisSoftMin": 0,
+            "gradientMode": "none"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": [
+            "sum"
+          ],
+          "showLegend": true,
+          "sortBy": "Total",
+          "sortDesc": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "id": 6,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 16
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "Top pages",
+      "description": "Pages with the most typo reports over the selected range.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki}"
+          },
+          "expr": "topk(10, sum by (page) (count_over_time({service_name=~\"$service\", event_name=\"typo\"} | json site=`attributes[\"report.url_host\"]`, page=`attributes[\"report.url\"]`, selection=`attributes[\"report.selection\"]`, prefix=`attributes[\"report.prefix\"]`, suffix=`attributes[\"report.suffix\"]`, comment=`attributes[\"report.comment\"]`, lang=`attributes[\"report.lang\"]`, link=`attributes[\"report.text_fragment\"]` | site=~\"$site\" | lang=~\"$lang\" [$__range])))",
+          "editorMode": "code",
+          "legendFormat": "{{page}}",
+          "queryType": "instant"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "decimals": 0,
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "blue"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "showUnfilled": true,
+        "valueMode": "text",
+        "namePlacement": "left",
+        "sizing": "auto",
+        "minVizHeight": 16,
+        "maxVizHeight": 24,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "id": 7,
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 12,
+        "y": 16
+      }
+    },
+    {
+      "type": "bargauge",
+      "title": "By language",
+      "description": "Typo reports per page language (the lang attribute of the reported text).",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki}"
+          },
+          "expr": "sum by (lang) (count_over_time({service_name=~\"$service\", event_name=\"typo\"} | json site=`attributes[\"report.url_host\"]`, page=`attributes[\"report.url\"]`, selection=`attributes[\"report.selection\"]`, prefix=`attributes[\"report.prefix\"]`, suffix=`attributes[\"report.suffix\"]`, comment=`attributes[\"report.comment\"]`, lang=`attributes[\"report.lang\"]`, link=`attributes[\"report.text_fragment\"]` | site=~\"$site\" | lang=~\"$lang\" [$__range]))",
+          "editorMode": "code",
+          "legendFormat": "{{lang}}",
+          "queryType": "instant"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "decimals": 0,
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "blue"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "showUnfilled": true,
+        "valueMode": "text",
+        "namePlacement": "left",
+        "sizing": "auto",
+        "minVizHeight": 16,
+        "maxVizHeight": 24,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        }
+      },
+      "id": 8,
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 16
+      }
+    },
+    {
+      "type": "logs",
+      "title": "Recent reports",
+      "description": "Every typo report, newest first, with the reader’s comment.",
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki}"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki}"
+          },
+          "expr": "{service_name=~\"$service\", event_name=\"typo\"} | json site=`attributes[\"report.url_host\"]`, page=`attributes[\"report.url\"]`, selection=`attributes[\"report.selection\"]`, prefix=`attributes[\"report.prefix\"]`, suffix=`attributes[\"report.suffix\"]`, comment=`attributes[\"report.comment\"]`, lang=`attributes[\"report.lang\"]`, link=`attributes[\"report.text_fragment\"]` | site=~\"$site\" | lang=~\"$lang\" | line_format `{{.site}} · {{.lang}} · …{{ trunc -40 .prefix }}«{{.selection}}»{{ trunc 40 .suffix }}… {{ if .comment }}— {{.comment}}{{ end }}`",
+          "editorMode": "code",
+          "queryType": "range"
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": false,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "prettifyLogMessage": false,
+        "enableLogDetails": true,
+        "dedupStrategy": "none",
+        "sortOrder": "Descending"
+      },
+      "id": 9,
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 24
+      }
+    }
+  ]
+}
