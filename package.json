@@ -118,6 +118,7 @@
   "overrides": {
     "esbuild": "0.28.2",
     "globals": "$globals",
+    "minimatch@>=7.0.0 <11.0.1": "11.0.5",
     "qs": "6.16.1"
   },
   "size-limit": [
