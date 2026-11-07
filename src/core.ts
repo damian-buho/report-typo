@@ -50,7 +50,7 @@ export function resolveUrl(
       console.debug('report-typo: invalid url option, falling back to path', { value: candidate })
       return fallback
     }
-    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:' || parsed.host === '') {
+    if ((parsed.protocol !== 'http:' && parsed.protocol !== 'https:') || parsed.host === '') {
       console.debug('report-typo: invalid url option, falling back to path', { value: candidate })
       return fallback
     }
