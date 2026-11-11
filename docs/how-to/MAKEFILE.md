@@ -841,14 +841,6 @@ Sync package.json with the projectfile
 
 > Image: PF_BRIDGE_IMAGE
 
-### `sass-lint`
-
-Lint Sass and SCSS sources
-
-`sass-lint **/*.scss -v -q`
-
-> Image: D9T_JS_TOOLS_IMAGE
-
 ## Projectfile
 
 ### `pf-bridge-ai-policy-md-check`
