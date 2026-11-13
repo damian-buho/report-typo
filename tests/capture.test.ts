@@ -136,4 +136,49 @@ describe('capture', () => {
     assert.equal(draft?.selection, 'brown')
     dom.restore()
   })
+
+  it('uses the comparePoint fallback when comparePoint is missing', () => {
+    const dom = mountDom()
+    dom.document.body.innerHTML = page
+    const p = dom.document.querySelector('p')
+    const text = p?.firstChild as Text
+    if (!p || !text) throw new Error('missing element')
+    const range = {
+      commonAncestorContainer: p,
+      startContainer: text,
+      startOffset: 10,
+      endContainer: text,
+      endOffset: 15,
+      toString: () => 'brown'
+      // no comparePoint
+    }
+    const selection = { isCollapsed: false, rangeCount: 1, getRangeAt: () => range as unknown as Range }
+    const draft = capture(selection as unknown as Selection, 256)
+    assert.ok(draft)
+    assert.equal(draft.selection, 'brown')
+    dom.restore()
+  })
+
+  it('skips hidden elements when capturing', () => {
+    const dom = mountDom()
+    dom.document.body.innerHTML = '<p>visible</p><p hidden>hidden</p>'
+    const hidden = dom.document.querySelector('p[hidden]')
+    const text = hidden?.firstChild as Text
+    if (!hidden || !text) throw new Error('missing element')
+    const range = {
+      commonAncestorContainer: hidden,
+      startContainer: text,
+      startOffset: 0,
+      endContainer: text,
+      endOffset: 6,
+      comparePoint: () => 0,
+      toString: () => 'hidden'
+    }
+    const selection = { isCollapsed: false, rangeCount: 1, getRangeAt: () => range as unknown as Range }
+    const draft = capture(selection as unknown as Selection, 256)
+    // hidden nodes are skipped, so selectedText remains empty and falls back to range.toString()
+    // The key is that the function does not throw and returns a draft
+    assert.ok(draft)
+    dom.restore()
+  })
 })

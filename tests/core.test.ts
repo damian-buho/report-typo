@@ -4,7 +4,7 @@
 
 import { afterEach, beforeEach, describe, it, mock } from 'node:test'
 import assert from 'node:assert/strict'
-import { create, pick } from '../src/core.js'
+import { create, pick, resolveUrl } from '../src/core.js'
 import en from '../locales/en.yaml'
 import es from '../locales/es.yaml'
 import uk from '../locales/uk.yaml'
@@ -347,5 +347,41 @@ describe('pick', () => {
 
   it('refuses an empty catalog', () => {
     assert.throws(() => pick({}, 'en'), /report-typo: empty locale catalog/)
+  })
+})
+
+describe('resolveUrl', () => {
+  it('resolves a function option with a valid http url', () => {
+    const location = { origin: 'https://example.com', pathname: '/a' }
+    const url = resolveUrl(_ => 'https://other.com/b?x=1#h', location as unknown as Location)
+    assert.equal(url, 'https://other.com/b?x=1')
+  })
+
+  it('falls back when the function returns an invalid url', () => {
+    const location = { origin: 'https://example.com', pathname: '/a' }
+    const url = resolveUrl(() => 'not a url', location as unknown as Location)
+    assert.equal(url, 'https://example.com/a')
+  })
+
+  it('falls back when the function returns a non-http protocol', () => {
+    const location = { origin: 'https://example.com', pathname: '/a' }
+    const url = resolveUrl(() => 'ftp://example.com/b', location as unknown as Location)
+    assert.equal(url, 'https://example.com/a')
+  })
+
+  it('strips hash and empty search from function result', () => {
+    const location = { origin: 'https://example.com', pathname: '/a' }
+    const url = resolveUrl(() => 'https://other.com/b?#', location as unknown as Location)
+    assert.equal(url, 'https://other.com/b')
+  })
+
+  it('handles full option', () => {
+    const location = { href: 'https://example.com/a?x=1#h', origin: 'https://example.com', pathname: '/a' }
+    assert.equal(resolveUrl('full', location as unknown as Location), 'https://example.com/a?x=1')
+  })
+
+  it('handles origin option', () => {
+    const location = { origin: 'https://example.com', pathname: '/a' }
+    assert.equal(resolveUrl('origin', location as unknown as Location), 'https://example.com')
   })
 })
