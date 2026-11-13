@@ -345,6 +345,10 @@ describe('pick', () => {
     assert.equal(pick(catalog, 'ja')[0], 'en')
   })
 
+  it('falls back to the first locale when tag is empty', () => {
+    assert.equal(pick(catalog, '')[0], 'en')
+  })
+
   it('refuses an empty catalog', () => {
     assert.throws(() => pick({}, 'en'), /report-typo: empty locale catalog/)
   })
@@ -369,15 +373,32 @@ describe('resolveUrl', () => {
     assert.equal(url, 'https://example.com/a')
   })
 
+  it('falls back when the function returns a url with empty host', () => {
+    const location = { origin: 'https://example.com', pathname: '/a' }
+    const url = resolveUrl(() => 'http://', location as unknown as Location)
+    assert.equal(url, 'https://example.com/a')
+  })
+
   it('strips hash and empty search from function result', () => {
     const location = { origin: 'https://example.com', pathname: '/a' }
     const url = resolveUrl(() => 'https://other.com/b?#', location as unknown as Location)
     assert.equal(url, 'https://other.com/b')
   })
 
+  it('strips lone question mark from search', () => {
+    const location = { origin: 'https://example.com', pathname: '/a' }
+    const url = resolveUrl(() => 'https://other.com/b?', location as unknown as Location)
+    assert.equal(url, 'https://other.com/b')
+  })
+
   it('handles full option', () => {
     const location = { href: 'https://example.com/a?x=1#h', origin: 'https://example.com', pathname: '/a' }
     assert.equal(resolveUrl('full', location as unknown as Location), 'https://example.com/a?x=1')
+  })
+
+  it('strips hash and lone question mark from full option', () => {
+    const location = { href: 'https://example.com/a?#', origin: 'https://example.com', pathname: '/a' }
+    assert.equal(resolveUrl('full', location as unknown as Location), 'https://example.com/a')
   })
 
   it('handles origin option', () => {
