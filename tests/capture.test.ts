@@ -156,29 +156,66 @@ describe('capture', () => {
     const draft = capture(selection as unknown as Selection, 256)
     assert.ok(draft)
     assert.equal(draft.selection, 'brown')
+    assert.equal(draft.prefix, 'the quick ')
+    assert.equal(draft.suffix, ' fox jumps')
     dom.restore()
   })
 
   it('skips hidden elements when capturing', () => {
     const dom = mountDom()
-    dom.document.body.innerHTML = '<p>visible</p><p hidden>hidden</p>'
-    const hidden = dom.document.querySelector('p[hidden]')
-    const text = hidden?.firstChild as Text
-    if (!hidden || !text) throw new Error('missing element')
-    const range = {
-      commonAncestorContainer: hidden,
-      startContainer: text,
-      startOffset: 0,
-      endContainer: text,
-      endOffset: 6,
-      comparePoint: () => 0,
-      toString: () => 'hidden'
-    }
+    dom.document.body.innerHTML = '<p>aa <span hidden>hidden</span> bb <em>sel</em> cc</p>'
+    const draft = capture(select(dom, 'em', 0, 3), 256)
+    assert.deepEqual(draft, { selection: 'sel', prefix: 'aa bb ', suffix: ' cc' })
+    dom.restore()
+  })
+
+  it('skips non-rendered elements when capturing', () => {
+    const dom = mountDom()
+    dom.document.body.innerHTML =
+      '<p>start <script>scripted</script> <span hidden>hidden</span> <span aria-hidden="true">aria</span> end <em>sel</em></p>'
+    const draft = capture(select(dom, 'em', 0, 3), 256)
+    assert.deepEqual(draft, { selection: 'sel', prefix: 'start end ', suffix: '' })
+    dom.restore()
+  })
+
+  it('captures context across multiple text nodes', () => {
+    const dom = mountDom()
+    dom.document.body.innerHTML = '<p>aa <b>bb</b> cc</p>'
+    const draft = capture(select(dom, 'b', 0, 2), 256)
+    assert.deepEqual(draft, { selection: 'bb', prefix: 'aa ', suffix: ' cc' })
+    dom.restore()
+  })
+
+  it('falls back to range.toString for a selection inside a hidden element', () => {
+    const dom = mountDom()
+    dom.document.body.innerHTML = '<p>visible <span hidden>hidden</span></p>'
+    const draft = capture(select(dom, 'span', 0, 6), 256)
+    assert.deepEqual(draft, { selection: 'hidden', prefix: 'visible ', suffix: '' })
+    dom.restore()
+  })
+
+  it('skips hidden text in a selection spanning visible and hidden nodes', () => {
+    const dom = mountDom()
+    dom.document.body.innerHTML = '<p>visible <span hidden>hidden</span></p>'
+    const p = dom.document.querySelector('p') as HTMLElement
+    const visible = p.firstChild as Text
+    const hidden = p.querySelector('span')?.firstChild as Text
+    const range = dom.document.createRange()
+    range.setStart(visible, 0)
+    range.setEnd(hidden, 6)
     const selection = { isCollapsed: false, rangeCount: 1, getRangeAt: () => range as unknown as Range }
     const draft = capture(selection as unknown as Selection, 256)
-    // hidden nodes are skipped, so selectedText remains empty and falls back to range.toString()
-    // The key is that the function does not throw and returns a draft
     assert.ok(draft)
+    assert.equal(draft.selection, 'visible')
+    dom.restore()
+  })
+
+  it('skips style, template and noscript elements when capturing', () => {
+    const dom = mountDom()
+    dom.document.body.innerHTML =
+      '<p>start <style>styled</style> <template>templated</template> <noscript>noscripted</noscript> end <em>sel</em></p>'
+    const draft = capture(select(dom, 'em', 0, 3), 256)
+    assert.deepEqual(draft, { selection: 'sel', prefix: 'start end ', suffix: '' })
     dom.restore()
   })
 })

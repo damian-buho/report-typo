@@ -27,7 +27,7 @@ const debug = (message: string, data: unknown): void =>
 
 /** Picks the catalog entry for a language tag by its base subtag, falling back to the first entry. */
 export function pick(catalog: Record<string, Messages>, tag: string): [string, Messages] {
-  const base = tag.toLowerCase().split('-', 1)[0] ?? ''
+  const base = tag.toLowerCase().split('-', 1)[0] as string
   const found = catalog[base]
   if (found) return [base, found]
   const [first] = Object.entries(catalog)
@@ -50,20 +50,16 @@ export function resolveUrl(
       console.debug('report-typo: invalid url option, falling back to path', { value: candidate })
       return fallback
     }
-    if ((parsed.protocol !== 'http:' && parsed.protocol !== 'https:') || parsed.host === '') {
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
       console.debug('report-typo: invalid url option, falling back to path', { value: candidate })
       return fallback
     }
-    parsed.hash = ''
-    if (parsed.search === '?') parsed.search = ''
     return parsed.origin + parsed.pathname + parsed.search
   }
   switch (option) {
     case 'full': {
       const parsed = new URL(location.href)
-      parsed.hash = ''
-      if (parsed.search === '?') parsed.search = ''
-      return parsed.origin + parsed.pathname + parsed.search
+          return parsed.origin + parsed.pathname + parsed.search
     }
     case 'origin': {
       return location.origin
@@ -89,8 +85,7 @@ export function create(catalog: Record<string, Messages>) {
     if (!endpoint && !options.send) throw new TypeError('report-typo: set `endpoint` or `send`')
     let send: Send
     if (options.send) send = options.send
-    else if (endpoint === undefined) throw new TypeError('report-typo: set `endpoint` or `send`')
-    else send = transport === 'webhook' ? webhook(endpoint, format) : relay(endpoint)
+    else send = transport === 'webhook' ? webhook(endpoint as string, format) : relay(endpoint as string)
     const pageLang = document.documentElement.lang
     const [locale, messages] = pick(catalog, options.locale ?? (pageLang || navigator.language))
     const ui = options.ui ?? (draft => confirm(draft, messages, locale, comment))

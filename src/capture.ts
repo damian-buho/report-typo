@@ -63,7 +63,7 @@ function renderedTextNodes(scope: Node): Text[] {
     }
   })
   for (let node = walker.firstChild(); node; node = walker.nextNode()) {
-    if (node.nodeType === 3) nodes.push(node as Text)
+    nodes.push(node as Text)
   }
   return nodes
 }

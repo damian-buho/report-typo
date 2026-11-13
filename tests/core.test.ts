@@ -361,22 +361,45 @@ describe('resolveUrl', () => {
     assert.equal(url, 'https://other.com/b?x=1')
   })
 
+  it('resolves a function option with a valid http url', () => {
+    const location = { origin: 'https://example.com', pathname: '/a' }
+    // eslint-disable-next-line unicorn/prefer-https
+    const url = resolveUrl(() => 'http://other.com/b?x=1#h', location as unknown as Location)
+    // eslint-disable-next-line unicorn/prefer-https
+    assert.equal(url, 'http://other.com/b?x=1')
+  })
+
   it('falls back when the function returns an invalid url', () => {
+    const debug = mock.method(console, 'debug', () => {})
     const location = { origin: 'https://example.com', pathname: '/a' }
     const url = resolveUrl(() => 'not a url', location as unknown as Location)
     assert.equal(url, 'https://example.com/a')
+    assert.equal(debug.mock.callCount(), 1)
+    assert.equal(debug.mock.calls[0]?.arguments[0], 'report-typo: invalid url option, falling back to path')
+    assert.deepEqual(debug.mock.calls[0]?.arguments[1], { value: 'not a url' })
+    mock.restoreAll()
   })
 
   it('falls back when the function returns a non-http protocol', () => {
+    const debug = mock.method(console, 'debug', () => {})
     const location = { origin: 'https://example.com', pathname: '/a' }
     const url = resolveUrl(() => 'ftp://example.com/b', location as unknown as Location)
     assert.equal(url, 'https://example.com/a')
+    assert.equal(debug.mock.callCount(), 1)
+    assert.equal(debug.mock.calls[0]?.arguments[0], 'report-typo: invalid url option, falling back to path')
+    assert.deepEqual(debug.mock.calls[0]?.arguments[1], { value: 'ftp://example.com/b' })
+    mock.restoreAll()
   })
 
   it('falls back when the function returns a url with empty host', () => {
+    const debug = mock.method(console, 'debug', () => {})
     const location = { origin: 'https://example.com', pathname: '/a' }
     const url = resolveUrl(() => 'http://', location as unknown as Location)
     assert.equal(url, 'https://example.com/a')
+    assert.equal(debug.mock.callCount(), 1)
+    assert.equal(debug.mock.calls[0]?.arguments[0], 'report-typo: invalid url option, falling back to path')
+    assert.deepEqual(debug.mock.calls[0]?.arguments[1], { value: 'http://' })
+    mock.restoreAll()
   })
 
   it('strips hash and empty search from function result', () => {
