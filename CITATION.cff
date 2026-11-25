@@ -43,5 +43,5 @@ keywords:
   - webhook
 license: MIT
 repository-code: https://kiota.ch/damian-buho/report-typo
-version: 0.3.8
-date-released: "2026-11-19"
+version: 0.3.9
+date-released: "2026-11-25"
